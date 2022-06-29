@@ -1,4 +1,5 @@
 const express = require('express');
+const productRouter = require('./routes/productsRouter');
 const errorMiddleware = require('./middlewares/error');
 
 const app = express();
@@ -8,6 +9,8 @@ app.use(express.json());
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.use('/products', productRouter);
 
 app.use(errorMiddleware);
 
