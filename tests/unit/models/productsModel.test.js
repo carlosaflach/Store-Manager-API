@@ -42,24 +42,28 @@ describe('TEST PRODUCT MODEL', () => {
 
   describe('When getting a product by id', () => {
     describe('In succeed case', () => {
-      const id = 1;
-      const response = {
+      const id = '1';
+      const sucessIdResponse = {
         "id": 1,
-        "name": "product A",
-      }
-
-      before(() => {
-        sinon.stub(connection, 'execute').resolves([response]);
-      })
-
-      after(() => {
+        "name": "produto A",
+        "quantity": 10
+      };
+  
+      before(async () => {
+        const response = [[sucessIdResponse], []]
+        sinon.stub(connection, 'execute').resolves(response);
+  
+      });
+  
+      after(async () => {
         connection.execute.restore();
-      })
+      });
 
       it('Should return the product', async () => {
         const modelResponse = await ProductsModel.findById(id);
+          
         expect(modelResponse).to.be.a('object');
-        expect(modelResponse).to.be.deep.equal(response);
+        expect(modelResponse).to.be.deep.equal(sucessIdResponse);
       });
     });
   });
