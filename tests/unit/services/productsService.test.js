@@ -49,7 +49,7 @@ describe('TEST PRODUCT SERVICE', () => {
         ProductModel.getAll.restore();
       });
   
-      it('Shpuld return false', async () => {
+      it('Should return false', async () => {
         const products = await ProductService.getAll();
   
         expect(products).to.be.equal(false);
@@ -84,6 +84,7 @@ describe('TEST PRODUCT SERVICE', () => {
 
     describe('In case that dont find the product', () => {
       const notExistsId = 47
+      // TODO: response = falsy
       const response = {
         error: {
           code: 'notFound',
@@ -92,7 +93,7 @@ describe('TEST PRODUCT SERVICE', () => {
       };
 
       before(() => {
-        sinon.stub(ProductModel, 'findById').resolves(response);
+        sinon.stub(ProductModel, 'findById').resolves(undefined);
       });
 
       after(() => {
