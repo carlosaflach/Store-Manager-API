@@ -68,21 +68,44 @@ describe('TEST PRODUCT MODEL', () => {
   });
 
   describe('When creating a new product', () => {
-    describe('In succeed case', () => {
-      const modelResponse = {
-        "id": 1,
-        "name": "product A",
-      };
+    const productName = 'product A';
 
+    const modelResponse = {
+      "id": 1,
+      "name": 'product A'
+    }
+
+    describe('When the product already exists', () => {
       before(() => {
-        sinon.stub(ProductsModel, 'create').resolves(modelResponse);
-      });
+        sinon.stub(connection, 'execute').resolves([modelResponse]);
+      })
 
-      it('Should return an object with "id" and "name" attributes', async () => {
-        const newProduct = await ProductsModel.create();
-        expect(newProduct).to.be.an('object');
-        expect(newProduct).to.have.all.keys('id', 'name');
+      after(() => {
+        connection.execute.restore();
+      })
+
+      it('Should return an object as response', async () => {
+        const check = await ProductsModel.checkIfExists(productName);
+        expect(check).to.be.an('object');
       });
     });
+
+    describe('When the product is created', () => {
+      before(() => {
+        sinon.stub(connection, 'execute').resolves([modelResponse]);
+      });
+
+      after(() => {
+        connection.execute.restore();
+      });
+
+      it('Shoul return an object with keys "id", "name"', async () => {
+        const newProduct = await ProductsModel.create(productName);
+        expect(newProduct).to.be.an('object');
+        expect(newProduct).to.have.all.keys('id', 'name');
+      })
+    });
   });
+
+
 });
