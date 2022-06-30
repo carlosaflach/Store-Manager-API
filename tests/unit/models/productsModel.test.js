@@ -45,8 +45,7 @@ describe('TEST PRODUCT MODEL', () => {
       const id = '1';
       const sucessIdResponse = {
         "id": 1,
-        "name": "produto A",
-        "quantity": 10
+        "name": "product A",
       };
   
       before(async () => {
@@ -64,6 +63,25 @@ describe('TEST PRODUCT MODEL', () => {
           
         expect(modelResponse).to.be.a('object');
         expect(modelResponse).to.be.deep.equal(sucessIdResponse);
+      });
+    });
+  });
+
+  describe('When creating a new product', () => {
+    describe('In succeed case', () => {
+      const modelResponse = {
+        "id": 1,
+        "name": "product A",
+      };
+
+      before(() => {
+        sinon.stub(ProductsModel, 'create').resolves(modelResponse);
+      });
+
+      it('Should return an object with "id" and "name" attributes', async () => {
+        const newProduct = await ProductsModel.create();
+        expect(newProduct).to.be.an('object');
+        expect(newProduct).to.have.all.keys('id', 'name');
       });
     });
   });
