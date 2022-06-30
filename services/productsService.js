@@ -25,7 +25,6 @@ const findById = async (id) => {
 
 const create = async (name) => {
   const check = await ProductModel.checkIfExists(name);
-  console.log('check', check);
 
   if (check.length > 0) {
     return {

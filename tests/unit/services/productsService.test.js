@@ -100,4 +100,51 @@ describe('TEST PRODUCT SERVICE', () => {
       });
     });
   });
+
+  describe('When creating a new product', () => {
+    const productName = 'product A';
+    const modelResponse = {
+      "id": 1,
+      "name": "product A"
+    }
+    
+    describe('When succeed in create a new product', () => {
+      const checkResponse = [];
+
+      before(() => {
+        sinon.stub(ProductModel, 'checkIfExists').resolves(checkResponse);
+        sinon.stub(ProductModel, 'create').resolves(modelResponse);
+      });
+
+      after(() => {
+        ProductModel.checkIfExists.restore();
+        ProductModel.create.restore();
+      });
+
+      it('Should return an object as response', async () => {
+        const newProduct = await ProductService.create(productName);
+
+        expect(newProduct).to.be.an('object');
+        expect(newProduct).to.have.all.keys('id', 'name');
+      });
+    });
+
+    describe('When the product is already registered', () => {
+      const checkResponse = [modelResponse];
+
+      before(() => {
+        sinon.stub(ProductModel, 'checkIfExists').resolves(checkResponse);
+      });
+
+      after(() => {
+        ProductModel.checkIfExists.restore();
+      });
+
+      it('Shoul return an error object', async () => {
+        const newProduct = await ProductService.create(productName);
+        expect(newProduct).to.be.an('object');
+        expect(newProduct).to.have.a.key('error');
+      });
+    });
+  });
 });
