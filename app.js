@@ -1,4 +1,5 @@
 const express = require('express');
+const rescue = require('express-rescue');
 const productRouter = require('./routes/productsRouter');
 const errorMiddleware = require('./middlewares/error');
 
@@ -10,7 +11,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products', productRouter);
+app.use('/products', rescue(productRouter));
 
 app.use(errorMiddleware);
 

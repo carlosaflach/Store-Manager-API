@@ -1,15 +1,15 @@
 const ProductService = require('../services/productsService');
 
 const getAll = async (req, res, _next) => {
-    const { code, data } = await ProductService.getAll();
-    res.status(code).json(data);
+    const products = await ProductService.getAll();
+    res.status(200).json(products);
 };
 
-const findById = async (req, res, _next) => {
+const findById = async (req, res, next) => {
     const { id } = req.params;
-    const { code, data } = await ProductService.findById(id);
-    if (!data) return res.status(404).json({ message: 'Product not found' });
-    res.status(code).json(data);
+    const product = await ProductService.findById(id);
+    if (product.error) return next(product.error);
+    res.status(200).json(product);
 };
 
 module.exports = {

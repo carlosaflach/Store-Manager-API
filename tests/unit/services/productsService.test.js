@@ -12,13 +12,11 @@ describe('TEST PRODUCT SERVICE', () => {
         const response =  [
           {
             "id": 1,
-            "name": "produto A",
-            "quantity": 10
+            "name": "product A",
           },
           {
             "id": 2,
-            "name": "produto B",
-            "quantity": 20
+            "name": "product B",
           }
         ];
   
@@ -30,14 +28,18 @@ describe('TEST PRODUCT SERVICE', () => {
         ProductModel.getAll.restore();
       });
 
-      it('Should return an object with code and data attributes as response', async () => {
+      it('Should return an array of objects', async () => {
         const products = await ProductService.getAll();
-        expect(products).to.be.an('object');
-        expect(products).to.have.all.keys('code', 'data');
+        expect(products).to.be.an('array');
+        
+        products.forEach((p) => {
+          expect(p).to.be.an('object');
+          expect(p).to.have.all.keys('id', 'name');
+        })
       });
     });
 
-    describe('When case that dont exists products', () => {
+  describe('When case that dont exists products', () => {
       before(() => {
         const response = null;
         sinon.stub(ProductModel, 'getAll').resolves(response);
@@ -47,7 +49,7 @@ describe('TEST PRODUCT SERVICE', () => {
         ProductModel.getAll.restore();
       });
   
-      it('Deve retornar false', async () => {
+      it('Shpuld return false', async () => {
         const products = await ProductService.getAll();
   
         expect(products).to.be.equal(false);
@@ -63,30 +65,31 @@ describe('TEST PRODUCT SERVICE', () => {
         "name": "product A",
       };
 
-      const obj = {
-        code: 200,
-        data: response
-      }
 
       before(() => {
-        sinon.stub(ProductModel, 'findById').resolves(obj);
+        sinon.stub(ProductModel, 'findById').resolves(response);
       })
 
       after(() => {
         ProductModel.findById.restore();
       });
 
-      it('Should return an object with keys "code" and "data".', async () => {
+      it('Should return product object with keys "id" and "name".', async () => {
         const serviceResponse = await ProductService.findById(id);
   
         expect(serviceResponse).to.be.a('object');
-        expect(serviceResponse).to.have.all.keys('code', 'data');
+        expect(serviceResponse).to.have.all.keys('id', 'name');
       });
     });
 
     describe('In case that dont find the product', () => {
       const notExistsId = 47
-      const response = null;
+      const response = {
+        error: {
+          code: 'notFound',
+          message: 'Product not found',
+        },
+      };
 
       before(() => {
         sinon.stub(ProductModel, 'findById').resolves(response);
@@ -96,11 +99,10 @@ describe('TEST PRODUCT SERVICE', () => {
         ProductModel.findById.restore();
       });
 
-
-      // TODO: Arrumar retorno do service com o erro padrão do middleware de erro.
-      it('Should return false', async () => {
+      it('Should return an error object', async () => {
         const serviceResponse = await ProductService.findById(notExistsId);
-        expect(serviceResponse).to.be.false;
+        expect(serviceResponse).to.be.an('object');
+        expect(serviceResponse).to.have.key('error');
       });
     });
   });
