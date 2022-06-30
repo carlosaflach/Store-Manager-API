@@ -23,7 +23,25 @@ const findById = async (id) => {
   return product;
 };
 
+const create = async (name) => {
+  const check = await ProductModel.checkIfExists(name);
+  console.log('check', check);
+
+  if (check.length > 0) {
+    return {
+      error: {
+        code: 'alreadyExists',
+        message: 'Product already exists',
+      },
+    };
+  }
+
+  const newProduct = await ProductModel.create(name);
+  return newProduct;
+};
+
 module.exports = {
   getAll,
   findById,
+  create,
 };
