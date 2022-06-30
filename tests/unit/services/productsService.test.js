@@ -84,14 +84,7 @@ describe('TEST PRODUCT SERVICE', () => {
 
     describe('In case that dont find the product', () => {
       const notExistsId = 47
-      // TODO: response = falsy
-      const response = {
-        error: {
-          code: 'notFound',
-          message: 'Product not found',
-        },
-      };
-
+    
       before(() => {
         sinon.stub(ProductModel, 'findById').resolves(undefined);
       });
