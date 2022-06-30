@@ -140,7 +140,7 @@ describe('TEST PRODUCT SERVICE', () => {
         ProductModel.checkIfExists.restore();
       });
 
-      it('Shoul return an error object', async () => {
+      it('Should return an error object', async () => {
         const newProduct = await ProductService.create(productName);
         expect(newProduct).to.be.an('object');
         expect(newProduct).to.have.a.key('error');

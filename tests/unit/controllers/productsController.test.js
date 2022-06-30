@@ -122,4 +122,59 @@ describe('TEST PRODUCT CONTROLLER', () => {
     });
     
   });
+
+  describe('When create a new product', () => {
+    describe('In case that succeed in create a new product', () => {
+      const serviceResponse = {
+        "id": 1,
+        "name": 'product A'
+      };
+
+      before(() => {
+        sinon.stub(ProductService, 'create').resolves(serviceResponse);
+      });
+
+      after(() => {
+        ProductService.create.restore();
+      });
+
+      it('Should return 201 as status code', async () => {
+        request.body = { "name": "product A" }
+        await ProductController.create(request, response);
+        expect(response.status.calledWith(201)).to.be.true;
+      });
+
+      it('Should return a body with "id", "name" attributes', async () => {
+        const body = { "id": 1, "name": "product A" };
+        expect(response.json.calledWith(body)).to.be.true;
+      });
+    });
+
+    describe('When it fails to create a new product because the product already exists', () => {
+      const serviceResponse = {
+           error: {
+            code: 'alreadyExists',
+            message: 'Product already exists',
+          },
+        }
+      
+      before(() => {
+        sinon.stub(ProductService, 'create').resolves(serviceResponse);
+      });
+
+      after(() => {
+        ProductService.create.restore();
+      })
+
+      it('Should return an object with error', async () => {
+        request.params = '99';
+        await ProductController.create(request, response, next);
+        expect(next.calledWith({
+            code: 'alreadyExists',
+            message: 'Product already exists',
+          },
+        )).to.be.true;
+      })
+    });
+  });
 });
