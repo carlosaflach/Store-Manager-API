@@ -17,6 +17,32 @@ const createSale = async (array) => {
   };
 };
 
+const getAll = async () => {
+    const query = `SELECT s.id AS saleId, s.date AS date, sp.product_id AS productId,
+    sp.quantity as quantity
+    FROM StoreManager.sales AS s
+    INNER JOIN StoreManager.sales_products AS sp
+    ON sp.sale_id = s.id;`;
+    
+  const [sales] = await connection.execute(query);
+  return sales;
+};
+
+const findById = async (id) => {
+  const query = `
+  SELECT s.date AS date, sp.product_id AS productId,
+  sp.quantity as quantity
+  FROM StoreManager.sales AS s
+  INNER JOIN StoreManager.sales_products AS sp
+  ON sp.sale_id = s.id
+  WHERE s.id = ?;`;
+
+  const [sale] = await connection.execute(query, [id]);
+  return sale;
+};
+
 module.exports = {
   createSale,
+  getAll,
+  findById,
 };
