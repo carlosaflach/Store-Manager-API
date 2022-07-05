@@ -40,7 +40,7 @@ const create = async (name) => {
 };
 
 const update = async (id, name) => {
-  const productExists = await ProductModel.findById(Number(id));
+  const productExists = await ProductModel.findById(id);
   
   if (!productExists) {
     return {
@@ -51,9 +51,24 @@ const update = async (id, name) => {
     };
   }
 
-  const updatedProduct = await ProductModel.update(Number(id), name);
+  const updatedProduct = await ProductModel.update(id, name);
 
   return updatedProduct;
+};
+
+const deleteProduct = async (id) => {
+  const productExists = await ProductModel.findById(id);
+
+  if (!productExists) {
+    return {
+      error: {
+        code: 'notFound',
+        message: 'Product not found',
+      },
+    };
+  }
+  await ProductModel.deleteProduct(id);
+  return true;
 };
 
 module.exports = {
@@ -61,4 +76,5 @@ module.exports = {
   findById,
   create,
   update,
+  deleteProduct,
 };

@@ -24,10 +24,19 @@ const update = async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  const updatedProduct = await ProductService.update(id, name);
+  const updatedProduct = await ProductService.update(Number(id), name);
   if (updatedProduct.error) return next(updatedProduct.error);
 
   return res.status(200).json(updatedProduct);
+};
+
+const deleteProduct = async (req, res, next) => {
+  const { id } = req.params;
+  
+  const isDeleted = await ProductService.deleteProduct(Number(id));
+  if (isDeleted.error) return next(isDeleted.error);
+
+  return res.status(204).end();
 };
 
 module.exports = {
@@ -35,4 +44,5 @@ module.exports = {
   findById,
   create,
   update,
+  deleteProduct,
 };
