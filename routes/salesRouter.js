@@ -7,5 +7,6 @@ const { validateProductId, validateQuantity } = require('../middlewares/salesVal
 salesRouter.post('/', validateProductId, validateQuantity, SalesController.createSale);
 salesRouter.get('/', SalesController.getAll);
 salesRouter.get('/:id', SalesController.findById);
+salesRouter.delete('/:id', SalesController.deleteSale);
 
 module.exports = salesRouter;
