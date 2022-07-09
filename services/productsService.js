@@ -58,7 +58,6 @@ const update = async (id, name) => {
 
 const deleteProduct = async (id) => {
   const productExists = await ProductModel.findById(id);
-
   if (!productExists) {
     return {
       error: {

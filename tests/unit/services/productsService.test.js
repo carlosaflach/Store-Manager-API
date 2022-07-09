@@ -147,4 +147,135 @@ describe('TEST PRODUCT SERVICE', () => {
       });
     });
   });
+
+  describe('When updated a product', () => {
+    describe('When it succeed', () => {
+      const modelReponse = {
+        id: 1,
+        name: 'product A',
+        quantity: 10,
+      };
+
+      const sucessIdResponse = {
+        "id": 1,
+        "name": "product A",
+      };
+
+      before(() => {
+        sinon.stub(ProductModel, 'update').resolves(modelReponse);
+        sinon.stub(ProductModel, 'findById').resolves(sucessIdResponse);
+      });
+
+      after(() => {
+        ProductModel.update.restore();
+        ProductModel.findById.restore();
+      });
+
+      it('Should return a object with the product', async () => {
+        const id = 1;
+        const name = 'product A'
+        const product = await ProductService.update(id, name);
+
+        expect(product).to.be.an('object');
+      });
+
+      it('Should return a object with keys: "id", "name", "quantity"', async () => {
+        const id = 1;
+        const name = 'product A'
+        const product = await ProductService.update(id, name);
+
+        expect(product).to.have.all.keys('id', 'name', 'quantity');
+      });
+
+    });
+
+    describe('When it fails', () => {
+       before(() => {
+        sinon.stub(ProductModel, 'findById').resolves(undefined);
+      });
+
+      after(() => {
+        ProductModel.findById.restore();
+      });
+
+      it('Should return an error object', async () => {
+        const id = 1;
+        const name = 'product A'
+        const product = await ProductService.update(id, name);
+        expect(product).to.be.an('object');
+        expect(product).to.have.a.key('error');
+      });
+    });
+  });
+
+  describe('When delete a product', () => {
+    describe('When it succeed', () => {
+      const sucessIdResponse = {
+        "id": 1,
+        "name": "product A",
+      };
+
+      before(() => {
+        sinon.stub(ProductModel, 'deleteProduct').resolves(true);
+        sinon.stub(ProductModel, 'findById').resolves(sucessIdResponse);
+      });
+
+      after(() => {
+        ProductModel.deleteProduct.restore();
+        ProductModel.findById.restore();
+      });
+
+      it('Should return true', async () => {
+        const id = 1;
+        const isDeleted = await ProductService.deleteProduct(id);
+        expect(isDeleted).to.be.true;
+      });
+    });
+
+    describe('When it fails', () => {
+
+      before(() => {
+        sinon.stub(ProductModel, 'findById').resolves(undefined);
+      });
+
+      after(() => {
+        ProductModel.findById.restore();
+      });
+
+      it('Should return an error object', async () => {
+        const id = 1;
+        const isDeleted = await ProductService.deleteProduct(id);
+        expect(isDeleted).to.be.an('object');
+        expect(isDeleted).to.have.a.key('error');
+      });
+    });
+  });
+
+  describe('When search a product by name', () => {
+    describe('When succeed', () => {
+
+      const modelReponse = [
+        {
+          "id": 1,
+          "name": "Martelo de Thor",
+        }
+      ];
+
+      before(() => {
+        sinon.stub(ProductModel, 'search').resolves([modelReponse]);
+      });
+
+      after(() => {
+        ProductModel.search.restore();
+      });
+
+
+      it('Should return an array of objects of products that includes that name', async () => {
+        const searchTerm = "Martelo"
+        const products = await ProductService.search(searchTerm);
+
+        expect(products).to.be.an('array');
+      });
+    });
+  });
 });
