@@ -173,17 +173,17 @@ describe('TEST PRODUCT MODEL', () => {
         }];
       
       before(() => {
-        sinon.stub(connection, 'execute').resolves(modelResponse);
+        sinon.stub(connection, 'execute').resolves([modelResponse]);
       });
 
       after(() => {
         connection.execute.restore();
       });
       
-      it('Should return a product object', async () => {
+      it('Should return an array of products that contain that name', async () => {
         const searchTerm = 'Martelo';
         const products = await ProductsModel.search(searchTerm);
-        expect(products).to.be.an('object');
+        expect(products).to.be.an('array');
       });
     });
   });
