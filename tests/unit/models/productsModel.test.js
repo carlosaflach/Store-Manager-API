@@ -99,7 +99,7 @@ describe('TEST PRODUCT MODEL', () => {
         connection.execute.restore();
       });
 
-      it('Shoul return an object with keys "id", "name"', async () => {
+      it('Should return an object with keys "id", "name"', async () => {
         const newProduct = await ProductsModel.create(productName);
         expect(newProduct).to.be.an('object');
         expect(newProduct).to.have.all.keys('id', 'name');
@@ -107,5 +107,85 @@ describe('TEST PRODUCT MODEL', () => {
     });
   });
 
+  describe('When update the product', () => {
+    const modelReponse = {
+      id: 1,
+      name: 'product A',
+      quantity: 10,
+    }
+    describe('When it succeed', () => {
+      before(() => {
+        sinon.stub(connection, 'execute').resolves(modelReponse);
+      });
+
+      after(() => {
+        connection.execute.restore();
+      });
+
+      it('Should return an object as response', async () => {
+        const product = {
+          id: 1,
+          name: 'product A',
+          quantity: 5
+        }
+        const updatedProduct = await ProductsModel.update(product.id, product.name, product.quantity);
+        expect(updatedProduct).to.be.an('object');
+      });
+
+      it('The object should have all keys: "id", "name", "quantity"', async () => {
+        const product = {
+          id: 1,
+          name: 'product A',
+          quantity: 5
+        }
+        const updatedProduct = await ProductsModel.update(product.id, product.name, product.quantity);
+        expect(updatedProduct).to.have.all.keys('id', 'name', 'quantity');
+      });
+    });
+  });
+
+  describe('When delete a product from db', () => {
+    describe('When it succeed', () => {
+
+      before(() => {
+        sinon.stub(connection, 'execute').resolves(true);
+      });
+
+      after(() => {
+        connection.execute.restore();
+      });
+
+      it('Should return true', async () => {
+        const id = 1;
+        const isDeleted = await ProductsModel.deleteProduct(id);
+        expect(isDeleted).to.be.true;
+      });
+    });
+  });
+
+  describe('When search a product by name', () => {
+    describe('When it succeed', () => {
+
+      const modelResponse = [
+        {
+          "id": 1,
+          "name": "Martelo de Thor",
+        }];
+      
+      before(() => {
+        sinon.stub(connection, 'execute').resolves(modelResponse);
+      });
+
+      after(() => {
+        connection.execute.restore();
+      });
+      
+      it('Should return a product object', async () => {
+        const searchTerm = 'Martelo';
+        const products = await ProductsModel.search(searchTerm);
+        expect(products).to.be.an('object');
+      });
+    });
+  });
 
 });
