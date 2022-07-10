@@ -170,11 +170,142 @@ describe('TEST PRODUCT CONTROLLER', () => {
         request.params = '99';
         await ProductController.create(request, response, next);
         expect(next.calledWith({
-            code: 'alreadyExists',
-            message: 'Product already exists',
-          },
+          code: 'alreadyExists',
+          message: 'Product already exists',
+        },
         )).to.be.true;
-      })
+      });
+    });
+  });
+
+  describe('When update a product', () => {
+    describe('When succeed', () => {
+      const serviceReponse = {
+        "id": 1,
+        "name": "Product A"
+      };
+
+      before(() => {
+        sinon.stub(ProductService, 'update').resolves(serviceReponse);
+      });
+
+      after(() => {
+        ProductService.update.restore();
+      });
+
+      it('Should return 200 as status code', async () => {
+        request.params = '1';
+        request.body = { "name": "product A" }
+        await ProductController.update(request, response);
+        expect(response.status.calledWith(200)).to.be.equal(true);
+      });
+
+      it('Should return a body with "id", "name" attributes', async () => {
+        const body = { "id": 1, "name": "product A" };
+        expect(response.json.calledWith(body)).to.be.true;
+      });
+    });
+
+    describe('When it fails', () => {
+      const serviceResponse = {
+        error: {
+          code: 'notFound',
+          message: 'Product not found',
+        },
+      };
+
+      before(() => {
+        sinon.stub(ProductService, 'update').resolves(serviceResponse);
+      });
+
+      after(() => {
+        ProductService.update.restore();
+      });
+
+      it('Should return an object with error', async () => {
+        request.params = '1';
+        request.body = { "name": "product A" }
+        await ProductController.update(request, response, next);
+        expect(next.calledWith({
+          code: 'notFound',
+          message: 'Product not found',
+        },
+        )).to.be.true;
+      });
+    });
+  });
+
+  describe('When delete a product', () => {
+    describe('When succeed', () => {
+      
+      before(() => {
+        sinon.stub(ProductService, 'deleteProduct').resolves(true);
+      });
+
+      after(() => {
+        ProductService.deleteProduct.restore();
+      });
+
+
+      it('Should return status 204, and end the request', async () => {
+        request.params = '1'
+        await ProductController.deleteProduct(request, response);
+        expect(response.status.calledWith(204)).to.be.true;
+      });
+    });
+
+    describe('When fails', () => { 
+
+      const serviceResponse = {
+        error: {
+          code: 'notFound',
+          message: 'Product not found',
+        },
+      };
+
+      before(() => {
+        sinon.stub(ProductService, 'deleteProduct').resolves(serviceResponse);
+      });
+
+      after(() => {
+        ProductService.deleteProduct.restore();
+      });
+
+      it('Should return an object with error', async () => {
+        request.params = '1';
+        await ProductController.deleteProduct(request, response, next);
+        expect(next.calledWith({
+          code: 'notFound',
+          message: 'Product not found',
+        },
+        )).to.be.true;
+      });
+     });
+  });
+
+  describe('When search a product by search term', () => {
+    describe('When succeed', () => {
+      const serviceReponse = [
+        {
+          "id": 1,
+          "name": "Martelo de Thor",
+        }
+      ];  
+      before(() => {
+        sinon.stub(ProductService, 'search').resolves([serviceReponse]);
+      });
+
+      after(() => {
+        ProductService.search.restore();
+      });
+
+      it('Should return a 200 status codes', async () => {
+        request.query = 'Martelo';
+
+        await ProductController.search(request, response);
+
+        expect(response.status.calledWith(200)).to.be.true
+      });
     });
   });
 });
