@@ -99,6 +99,22 @@ This practice ensures greater reliability and security in requests and responses
   </details>
  
 ## 📃 API Documentation
+
+### API Use Cases
+
+- List all products avaiable
+- List a product by id
+- List a product by name
+- Create a new product
+- Update a product by id
+- Delete a product by id
+
+- List all sales
+- List a sale by id
+- Create a new sale
+- Update a sale by id
+- Delete a sale by id
+
     
 ### Methods
     
