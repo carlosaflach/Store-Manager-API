@@ -97,6 +97,29 @@ This practice ensures greater reliability and security in requests and responses
    >NOTE: If you are running the API via docker, run the above command inside the container.
     
   </details>
+ 
+## 📃 API Documentation
+    
+### Methods
+    
+| Method | Description                                            |
+|--------|-------------------------------------------------------|
+| GET    | To return one or more registry.          |
+| POST   | To create a new registry.                |
+| PUT    | To update a registry. |
+| DELETE | To remove a registry.                        |
+ 
+### HTTP Responses Codes
+
+| Code | Description                                                 |
+|--------|-----------------------------------------------------------|
+| 200    | OK: The request has succeeded.                     |
+| 201    | Created: The request has succeeded and has led to the creation of a resource.                        |
+| 204    | No Content: The request has succeeded and delete a registry.                            |
+| 400    | Bad Request: The server cannot or will not process the request due to something that is perceived to be a client error.                   |
+| 404    | Not Found: The server cannot find the requested resource.                       |
+| 422    | Unprocessable Entity: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions. |
+| 500    | Internal server error.                                    |
 
 ## Created By:
 
