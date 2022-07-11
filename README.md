@@ -109,7 +109,7 @@ This practice ensures greater reliability and security in requests and responses
 | PUT    | To update a registry. |
 | DELETE | To remove a registry.                        |
  
-### HTTP Responses Codes
+### HTTP Response Codes
 
 | Code | Description                                                 |
 |--------|-----------------------------------------------------------|
