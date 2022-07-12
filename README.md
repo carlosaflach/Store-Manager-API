@@ -137,6 +137,8 @@ This practice ensures greater reliability and security in requests and responses
 | 422    | Unprocessable Entity: The server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions. |
 | 500    | Internal server error.                                    |
 
+## 🚧 Under Construction 🚧
+
 ## Created By:
 
 - Linkedin - [Carlos A.](https://www.linkedin.com/in/carlosafonsoflach/)
