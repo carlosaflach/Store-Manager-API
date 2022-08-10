@@ -33,7 +33,7 @@ This practice ensures greater reliability and security in requests and responses
 
   1. Clone the repository
 
-  - `git clone git@github.com:carlosaflach/Store-Manager.git`;
+  - `git clone git@github.com:carlosaflach/Store-Manager-API.git`;
 
   - Enter in the folder that was created in the cloning process:
     - `cd Store-Manager-API`;
