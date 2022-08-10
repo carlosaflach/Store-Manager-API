@@ -36,7 +36,7 @@ This practice ensures greater reliability and security in requests and responses
   - `git clone git@github.com:carlosaflach/Store-Manager.git`;
 
   - Enter in the folder that was created in the cloning process:
-    - `cd Store-Manager`;
+    - `cd Store-Manager-API`;
 
   2. Install the dependencies
 
